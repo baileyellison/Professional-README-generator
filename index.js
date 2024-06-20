@@ -1,5 +1,7 @@
 // TODO: Include packages needed for this application
 const inquirer = require('inquirer');
+const fs = require('fs');
+const util = require('util');
 // TODO: Create an array of questions for user input
 const questions = [
     {
@@ -23,12 +25,12 @@ const questions = [
         type: 'input',
         name: 'installation',
         message: 'What are the steps required to install your project?'
-    }
+    },
     {
         type: 'input',
         name: 'usage',
         message: 'Provide instructions and examples for use'
-    }
+    },
     {
         type: 'input',
         name: 'credits',
@@ -41,7 +43,7 @@ const questions = [
     },
     {
         type: 'input',
-        name: 'contributing',
+        name: 'license',
         message: 'What are the rules for contributing to your project?',
         choices: ['MIT', 'APACHE 2.0', 'GPL 3.0', 'BSD 3', 'None']
     },
@@ -59,7 +61,7 @@ const questions = [
         type: 'input',
         name: 'github',
         message: 'Enter your GitHub Username:',
-        validaties: function (value) {
+        validate: function (value) {
             if (value) {
                 return true;
             } else {
@@ -71,7 +73,7 @@ const questions = [
         type: 'input',
         name: 'email',
         message: 'Enter your email address:',
-        validaties: function (value) {
+        validate: function (value) {
             const pass = value.match(
                 /^[^\s@]+@[^\s@]+\.[^\s@]+$/
             );
@@ -81,7 +83,7 @@ const questions = [
             return 'Please enter a valid email address';
         }
     },
-],
+];
 
 // TODO: Create a function to write README file
 function writeToFile(fileName, data) { 
@@ -127,7 +129,16 @@ function writeToFile(fileName, data) {
 }
 
 // TODO: Create a function to initialize app
-function init() { }
+async function init() { 
+    try {
+        const answers = await inquirer.prompt(questions);
+        await writeToFile('README.md', answers);
+        console.log('Successfully wrote to README.md');
+    } catch (error) {
+        console.error('Error writing README.md');
+        console.error(error);
+    }
+}
 
 // Function call to initialize app
 init();

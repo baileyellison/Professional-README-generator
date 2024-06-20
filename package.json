@@ -10,5 +10,6 @@
   "dependencies": {
     "inquirer": "^8.2.4"
   },
-  "description": ""
+  "description": "## Your Task",
+  "devDependencies": {}
 }

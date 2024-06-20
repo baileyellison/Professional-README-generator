@@ -2,6 +2,8 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
 const util = require('util');
+
+const writeFileAsync = util.promisify(fs.writeFile);
 // TODO: Create an array of questions for user input
 const questions = [
     {
@@ -86,7 +88,7 @@ const questions = [
 ];
 
 // TODO: Create a function to write README file
-function writeToFile(fileName, data) { 
+async function writeToFile(fileName, data) {
     const readmeContent =
     `# ${data.title}
 
@@ -125,7 +127,13 @@ function writeToFile(fileName, data) {
     If you have any questions about this project, please contact me via GitHub or email: [${data.github}](https://github.com/${data.github}) or ${data.email}
     `;
 
-    return writeFileAsync(fileName, readmeContent);
+    try {
+        await writeFileAsync(fileName, readmeContent.trim());
+        console.log('Successfully wrote to README.md');
+    } catch (error) {
+        console.error('Error writing README.md');
+        console.error(error);
+    }
 }
 
 // TODO: Create a function to initialize app
